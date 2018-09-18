@@ -1,4 +1,4 @@
-module Update exposing (update)
+module Update exposing (init, logMsg, update)
 
 import SelectList exposing (Direction(..))
 import Types exposing (..)
@@ -60,3 +60,25 @@ init msgs =
     , filtered = SelectList.fromList msgs
     , isVisible = False
     }
+
+
+logMsg : Msg -> String
+logMsg msg =
+    case msg of
+        ShowUp ->
+            "ShowUp"
+
+        Close ->
+            "Close"
+
+        Input input ->
+            "Input: " ++ input
+
+        UpCursor ->
+            "UpCursor"
+
+        DownCursor ->
+            "DownCursor"
+
+        Confirm ->
+            "Confirm"
