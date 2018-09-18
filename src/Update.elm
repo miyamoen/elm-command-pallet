@@ -1,6 +1,6 @@
 module Update exposing (update)
 
-import SelectList
+import SelectList exposing (Direction(..))
 import Types exposing (..)
 
 
@@ -27,6 +27,22 @@ update msg model =
                         )
                         model.msgs
                         |> SelectList.fromList
+            }
+
+        UpCursor ->
+            { model
+                | filtered =
+                    Maybe.map
+                        (SelectList.attempt (SelectList.changePosition Before 1))
+                        model.filtered
+            }
+
+        DownCursor ->
+            { model
+                | filtered =
+                    Maybe.map
+                        (SelectList.attempt (SelectList.changePosition After 1))
+                        model.filtered
             }
 
         Confirm ->

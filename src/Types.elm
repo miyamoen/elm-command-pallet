@@ -15,4 +15,6 @@ type Msg
     = ShowUp
     | Close
     | Input String
+    | UpCursor
+    | DownCursor
     | Confirm
