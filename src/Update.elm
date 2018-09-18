@@ -1,31 +1,46 @@
 module Update exposing (update)
 
+import SelectList
 import Types exposing (..)
 
 
-update : Msg -> Model msg -> ( Model msg, Cmd msg )
+update : Msg -> Model msg -> Model msg
 update msg model =
     case msg of
         ShowUp ->
-            Tuple.pair { model | isVisible = True } Cmd.none
+            { model | isVisible = True }
 
         Close ->
-            Tuple.pair
-                { model
-                    | isVisible = False
-                    , filter = ""
-                    , filtered = model.msgs
-                }
-                Cmd.none
+            { model
+                | isVisible = False
+                , filter = ""
+                , filtered = SelectList.fromList model.msgs
+            }
 
         Input input ->
-            Tuple.pair { model | filter = input } Cmd.none
+            { model
+                | filter = input
+                , filtered =
+                    List.filter
+                        (\( label, _ ) ->
+                            String.contains (String.toLower input) label
+                        )
+                        model.msgs
+                        |> SelectList.fromList
+            }
 
         Confirm ->
-            Tuple.pair
-                { model
-                    | isVisible = False
-                    , filter = ""
-                    , filtered = model.msgs
-                }
-                Cmd.none
+            { model
+                | isVisible = False
+                , filter = ""
+                , filtered = SelectList.fromList model.msgs
+            }
+
+
+init : List ( String, msg ) -> Model msg
+init msgs =
+    { filter = ""
+    , msgs = msgs
+    , filtered = SelectList.fromList msgs
+    , isVisible = False
+    }

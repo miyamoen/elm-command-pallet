@@ -5,8 +5,8 @@ import SelectList exposing (SelectList)
 
 type alias Model msg =
     { filter : String
-    , msgs : SelectList ( String, msg )
-    , filtered : SelectList ( String, msg )
+    , msgs : List ( String, msg )
+    , filtered : Maybe (SelectList ( String, msg ))
     , isVisible : Bool
     }
 
