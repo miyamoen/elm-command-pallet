@@ -4,16 +4,23 @@ import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
 import Element.Background as Background
+import Element.Input as Input exposing (labelLeft)
 import SelectList exposing (Position(..))
 import Types exposing (..)
 import Update exposing (..)
 
 
 view : (Msg -> msg) -> Model msg -> Element msg
-view toMsg { isVisible, filtered } =
+view toMsg { isVisible, filtered, filter } =
     if isVisible then
         column []
-            [ text "text box"
+            [ Input.text []
+                { onChange = Input
+                , text = filter
+                , placeholder = Nothing
+                , label = labelLeft [] none
+                }
+                |> Element.map toMsg
             , column [] <|
                 case filtered of
                     Nothing ->
