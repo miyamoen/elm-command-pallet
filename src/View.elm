@@ -3,6 +3,8 @@ module View exposing (view)
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
+import Element.Background as Background
+import SelectList exposing (Position(..))
 import Types exposing (..)
 import Update exposing (..)
 
@@ -12,16 +14,33 @@ view toMsg { isVisible, filtered } =
     if isVisible then
         column []
             [ text "text box"
-            , case filtered of
-                Nothing ->
-                    text "empty"
+            , column [] <|
+                case filtered of
+                    Nothing ->
+                        [ text "empty" ]
 
-                Just msgs ->
-                    text "msgs"
+                    Just msgs ->
+                        SelectList.mapBy
+                            (\pos selected ->
+                                el
+                                    [ Background.color <|
+                                        case pos of
+                                            Selected ->
+                                                rgba255 56 154 94 0.76
+
+                                            _ ->
+                                                rgba255 144 144 144 0.69
+                                    ]
+                                <|
+                                    text <|
+                                        Tuple.first <|
+                                            SelectList.selected selected
+                            )
+                            msgs
             ]
 
     else
-        text "Hidden"
+        none
 
 
 book : Book
