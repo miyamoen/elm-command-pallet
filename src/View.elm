@@ -4,7 +4,7 @@ import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
 import Types exposing (..)
-import Update exposing (init, logMsg)
+import Update exposing (..)
 
 
 view : (Msg -> msg) -> Model msg -> Element msg
@@ -26,8 +26,33 @@ view toMsg { isVisible, filtered } =
 
 book : Book
 book =
-    bookWithFrontCover "CommandPallet"
-        (view logMsg <| init [ ( "first", "first" ) ])
+    let
+        view_ isVisible msgs =
+            let
+                model =
+                    List.map (\msg -> ( msg, msg )) msgs
+                        |> init
+            in
+            view logMsg <|
+                if isVisible then
+                    update ShowUp model
+
+                else
+                    model
+    in
+    intoBook "CommandPallet" identity view_
+        |> addStory (Story.bool "isVisible")
+        |> addStory
+            (Story "msgs"
+                [ ( "empty", [] )
+                , ( "one", [ "first" ] )
+                , ( "two", [ "first", "second" ] )
+                , ( "three", [ "first", "second", "third" ] )
+                ]
+            )
+        |> buildBook
+        |> withFrontCover
+            (view_ True [ "first" ])
 
 
 main : Bibliopola.Program
