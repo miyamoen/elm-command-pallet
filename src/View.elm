@@ -4,7 +4,7 @@ import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
 import Element.Background as Background
-import Element.Input as Input exposing (labelLeft)
+import Organism.Input as Input
 import SelectList exposing (Position(..))
 import Types exposing (..)
 import Update exposing (..)
@@ -13,14 +13,13 @@ import Update exposing (..)
 view : Model msg -> Element msg
 view { isVisible, filtered, filter, toMsg } =
     if isVisible then
-        column []
-            [ Input.text []
-                { onChange = Input
-                , text = filter
-                , placeholder = Nothing
-                , label = labelLeft [] none
-                }
-                |> Element.map toMsg
+        column
+            [ explain Debug.todo
+            , width fill
+            , height <| fill
+            , paddingXY 24 40
+            ]
+            [ Input.view filter |> Element.map toMsg
             , column [] <|
                 case filtered of
                     Nothing ->

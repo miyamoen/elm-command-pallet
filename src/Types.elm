@@ -1,4 +1,4 @@
-module Types exposing (Model, Msg(..))
+module Types exposing (Model, Msg(..), inputId)
 
 import SelectList exposing (SelectList)
 
@@ -13,9 +13,15 @@ type alias Model msg =
 
 
 type Msg
-    = ShowUp
+    = NoOp
+    | ShowUp
     | Close
     | Input String
     | UpCursor
     | DownCursor
     | Confirm
+
+
+inputId : String
+inputId =
+    "miyamoen-elm-command-pallet-input"

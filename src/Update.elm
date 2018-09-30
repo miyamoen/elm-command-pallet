@@ -1,9 +1,11 @@
 module Update exposing (init, logMsg, subscriptions, update)
 
+import Browser.Dom as Dom
 import Browser.Events
 import Keyboard.Event exposing (considerKeyboardEvent)
 import Keyboard.Key exposing (Key(..))
 import SelectList exposing (Direction(..))
+import Task
 import Types exposing (..)
 
 
@@ -20,8 +22,12 @@ init toMsg msgs =
 update : Msg -> Model msg -> ( Model msg, Cmd msg )
 update msg model =
     case msg of
+        NoOp ->
+            Tuple.pair model Cmd.none
+
         ShowUp ->
-            Tuple.pair { model | isVisible = True } Cmd.none
+            Tuple.pair { model | isVisible = True } <|
+                Task.attempt (\_ -> model.toMsg NoOp) (Dom.focus inputId)
 
         Close ->
             Tuple.pair
@@ -99,6 +105,9 @@ subscriptions { isVisible, toMsg } =
 logMsg : Msg -> String
 logMsg msg =
     case msg of
+        NoOp ->
+            "NoOp"
+
         ShowUp ->
             "ShowUp"
 
