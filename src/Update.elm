@@ -1,4 +1,4 @@
-module Update exposing (init, logMsg, subscriptions, update)
+module Update exposing (init, subscriptions, update)
 
 import Browser.Dom as Dom
 import Browser.Events
@@ -100,28 +100,3 @@ subscriptions { isVisible, toMsg } =
                 )
         ]
         |> Sub.map toMsg
-
-
-logMsg : Msg -> String
-logMsg msg =
-    case msg of
-        NoOp ->
-            "NoOp"
-
-        ShowUp ->
-            "ShowUp"
-
-        Close ->
-            "Close"
-
-        Input input ->
-            "Input: " ++ input
-
-        UpCursor ->
-            "UpCursor"
-
-        DownCursor ->
-            "DownCursor"
-
-        Confirm ->
-            "Confirm"

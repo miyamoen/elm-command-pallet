@@ -72,7 +72,7 @@ subscriptions { commandPallet } =
 
 view : Model -> Html Msg
 view { num, commandPallet } =
-    layout [] <|
+    layout [ inFront <| CP.view commandPallet ] <|
         column [ width fill ]
             [ row [ width fill, spacing 5 ]
                 [ button [ centerX ]
@@ -81,5 +81,4 @@ view { num, commandPallet } =
                 , button [ centerX ]
                     { onPress = Just Increment, label = el [] <| text ">" }
                 ]
-            , CP.view commandPallet
             ]

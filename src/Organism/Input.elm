@@ -5,8 +5,7 @@ import Bibliopola.Story as Story
 import Element exposing (..)
 import Element.Input as Input exposing (labelBelow)
 import Html.Attributes exposing (id)
-import Types exposing (Msg(..), inputId)
-import Update exposing (logMsg)
+import Types exposing (Msg(..), inputId, logMsg)
 
 
 view : String -> Element Msg

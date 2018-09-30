@@ -1,9 +1,11 @@
 module View exposing (view)
 
+import Atom.Frame as Frame
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
 import Element.Background as Background
+import Element.Border as Border
 import Organism.Input as Input
 import SelectList exposing (Position(..))
 import Types exposing (..)
@@ -13,12 +15,7 @@ import Update exposing (..)
 view : Model msg -> Element msg
 view { isVisible, filtered, filter, toMsg } =
     if isVisible then
-        column
-            [ explain Debug.todo
-            , width fill
-            , height <| fill
-            , paddingXY 24 40
-            ]
+        Frame.view toMsg
             [ Input.view filter |> Element.map toMsg
             , column [] <|
                 case filtered of

@@ -1,4 +1,4 @@
-module Types exposing (Model, Msg(..), inputId)
+module Types exposing (Model, Msg(..), inputId, logMsg)
 
 import SelectList exposing (SelectList)
 
@@ -20,6 +20,31 @@ type Msg
     | UpCursor
     | DownCursor
     | Confirm
+
+
+logMsg : Msg -> String
+logMsg msg =
+    case msg of
+        NoOp ->
+            "NoOp"
+
+        ShowUp ->
+            "ShowUp"
+
+        Close ->
+            "Close"
+
+        Input input ->
+            "Input: " ++ input
+
+        UpCursor ->
+            "UpCursor"
+
+        DownCursor ->
+            "DownCursor"
+
+        Confirm ->
+            "Confirm"
 
 
 inputId : String
