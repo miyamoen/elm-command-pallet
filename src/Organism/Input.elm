@@ -3,7 +3,7 @@ module Organism.Input exposing (book, view)
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
 import Element exposing (..)
-import Element.Input as Input exposing (labelLeft)
+import Element.Input as Input exposing (labelBelow)
 import Types exposing (Msg(..))
 import Update exposing (logMsg)
 
@@ -14,7 +14,7 @@ view filter =
         { onChange = Input
         , text = filter
         , placeholder = Nothing
-        , label = labelLeft [] none
+        , label = labelBelow [] none
         }
 
 

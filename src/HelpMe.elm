@@ -27,7 +27,7 @@ init : ( Model, Cmd Msg )
 init =
     ( { num = 0
       , commandPallet =
-            CP.init
+            CP.init CommandPalletMsg
                 [ Tuple.pair "Increment" Increment
                 , Tuple.pair "Decrement" Decrement
                 ]
@@ -56,17 +56,18 @@ update msg model =
             Tuple.pair { model | num = model.num - 1 } Cmd.none
 
         CommandPalletMsg subMsg ->
+            let
+                ( cp, cmd ) =
+                    CP.update subMsg model.commandPallet
+            in
             Tuple.pair
-                { model
-                    | commandPallet =
-                        CP.update subMsg model.commandPallet
-                }
-                Cmd.none
+                { model | commandPallet = cp }
+                cmd
 
 
 subscriptions : Model -> Sub Msg
 subscriptions { commandPallet } =
-    CP.subscriptions CommandPalletMsg commandPallet
+    CP.subscriptions commandPallet
 
 
 view : Model -> Html Msg
@@ -80,5 +81,5 @@ view { num, commandPallet } =
                 , button [ centerX ]
                     { onPress = Just Increment, label = el [] <| text ">" }
                 ]
-            , CP.view CommandPalletMsg commandPallet
+            , CP.view commandPallet
             ]

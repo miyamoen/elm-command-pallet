@@ -8,6 +8,7 @@ type alias Model msg =
     , msgs : List ( String, msg )
     , filtered : Maybe (SelectList ( String, msg ))
     , isVisible : Bool
+    , toMsg : Msg -> msg
     }
 
 

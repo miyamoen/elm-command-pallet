@@ -14,23 +14,23 @@ type alias Msg =
     Types.Msg
 
 
-update : Msg -> Model msg -> Model msg
+update : Msg -> Model msg -> ( Model msg, Cmd msg )
 update msg (CommandPallet model) =
     Update.update msg model
+        |> Tuple.mapFirst CommandPallet
+
+
+init : (Msg -> msg) -> List ( String, msg ) -> Model msg
+init toMsg msgs =
+    Update.init toMsg msgs
         |> CommandPallet
 
 
-init : List ( String, msg ) -> Model msg
-init msgs =
-    Update.init msgs
-        |> CommandPallet
+view : Model msg -> Element msg
+view (CommandPallet model) =
+    View.view model
 
 
-view : (Msg -> msg) -> Model msg -> Element msg
-view toMsg (CommandPallet model) =
-    View.view toMsg model
-
-
-subscriptions : (Msg -> msg) -> Model msg -> Sub msg
-subscriptions toMsg (CommandPallet model) =
-    Update.subscriptions toMsg model
+subscriptions : Model msg -> Sub msg
+subscriptions (CommandPallet model) =
+    Update.subscriptions model

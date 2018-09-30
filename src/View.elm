@@ -10,8 +10,8 @@ import Types exposing (..)
 import Update exposing (..)
 
 
-view : (Msg -> msg) -> Model msg -> Element msg
-view toMsg { isVisible, filtered, filter } =
+view : Model msg -> Element msg
+view { isVisible, filtered, filter, toMsg } =
     if isVisible then
         column []
             [ Input.text []
@@ -57,11 +57,12 @@ book =
             let
                 model =
                     List.map (\msg -> ( msg, msg )) msgs
-                        |> init
+                        |> init logMsg
             in
-            view logMsg <|
+            view <|
                 if isVisible then
                     update ShowUp model
+                        |> Tuple.first
 
                 else
                     model

@@ -7,57 +7,77 @@ import SelectList exposing (Direction(..))
 import Types exposing (..)
 
 
-update : Msg -> Model msg -> Model msg
+init : (Msg -> msg) -> List ( String, msg ) -> Model msg
+init toMsg msgs =
+    { filter = ""
+    , msgs = msgs
+    , filtered = SelectList.fromList msgs
+    , isVisible = False
+    , toMsg = toMsg
+    }
+
+
+update : Msg -> Model msg -> ( Model msg, Cmd msg )
 update msg model =
     case msg of
         ShowUp ->
-            { model | isVisible = True }
+            Tuple.pair { model | isVisible = True } Cmd.none
 
         Close ->
-            { model
-                | isVisible = False
-                , filter = ""
-                , filtered = SelectList.fromList model.msgs
-            }
+            Tuple.pair
+                { model
+                    | isVisible = False
+                    , filter = ""
+                    , filtered = SelectList.fromList model.msgs
+                }
+                Cmd.none
 
         Input input ->
-            { model
-                | filter = input
-                , filtered =
-                    List.filter
-                        (\( label, _ ) ->
-                            String.contains (String.toLower input) label
-                        )
-                        model.msgs
-                        |> SelectList.fromList
-            }
+            Tuple.pair
+                { model
+                    | filter = input
+                    , filtered =
+                        List.filter
+                            (\( label, _ ) ->
+                                String.contains (String.toLower input) label
+                            )
+                            model.msgs
+                            |> SelectList.fromList
+                }
+                Cmd.none
 
         UpCursor ->
-            { model
-                | filtered =
-                    Maybe.map
-                        (SelectList.attempt (SelectList.changePosition Before 1))
-                        model.filtered
-            }
+            Tuple.pair
+                { model
+                    | filtered =
+                        Maybe.map
+                            (SelectList.attempt (SelectList.changePosition Before 1))
+                            model.filtered
+                }
+                Cmd.none
 
         DownCursor ->
-            { model
-                | filtered =
-                    Maybe.map
-                        (SelectList.attempt (SelectList.changePosition After 1))
-                        model.filtered
-            }
+            Tuple.pair
+                { model
+                    | filtered =
+                        Maybe.map
+                            (SelectList.attempt (SelectList.changePosition After 1))
+                            model.filtered
+                }
+                Cmd.none
 
         Confirm ->
-            { model
-                | isVisible = False
-                , filter = ""
-                , filtered = SelectList.fromList model.msgs
-            }
+            Tuple.pair
+                { model
+                    | isVisible = False
+                    , filter = ""
+                    , filtered = SelectList.fromList model.msgs
+                }
+                Cmd.none
 
 
-subscriptions : (Msg -> msg) -> Model msg -> Sub msg
-subscriptions toMsg { isVisible } =
+subscriptions : Model msg -> Sub msg
+subscriptions { isVisible, toMsg } =
     Sub.batch
         [ Browser.Events.onKeyDown <|
             considerKeyboardEvent
@@ -74,15 +94,6 @@ subscriptions toMsg { isVisible } =
                 )
         ]
         |> Sub.map toMsg
-
-
-init : List ( String, msg ) -> Model msg
-init msgs =
-    { filter = ""
-    , msgs = msgs
-    , filtered = SelectList.fromList msgs
-    , isVisible = False
-    }
 
 
 logMsg : Msg -> String
