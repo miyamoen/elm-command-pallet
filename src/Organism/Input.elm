@@ -1,0 +1,31 @@
+module Organism.Input exposing (book, view)
+
+import Bibliopola exposing (..)
+import Bibliopola.Story as Story
+import Element exposing (..)
+import Element.Input as Input exposing (labelLeft)
+import Types exposing (Msg(..))
+import Update exposing (logMsg)
+
+
+view : String -> Element Msg
+view filter =
+    Input.text []
+        { onChange = Input
+        , text = filter
+        , placeholder = Nothing
+        , label = labelLeft [] none
+        }
+
+
+book : Book
+book =
+    intoBook "Input" logMsg view
+        |> addStory
+            (Story.build "value" identity [ "spam spam", "spam egg ham" ])
+        |> buildBook
+
+
+main : Bibliopola.Program
+main =
+    fromBook book
