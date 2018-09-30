@@ -1,5 +1,8 @@
-module Update exposing (init, logMsg, update)
+module Update exposing (init, logMsg, subscriptions, update)
 
+import Browser.Events
+import Keyboard.Event exposing (considerKeyboardEvent)
+import Keyboard.Key exposing (Key(..))
 import SelectList exposing (Direction(..))
 import Types exposing (..)
 
@@ -51,6 +54,26 @@ update msg model =
                 , filter = ""
                 , filtered = SelectList.fromList model.msgs
             }
+
+
+subscriptions : (Msg -> msg) -> Model msg -> Sub msg
+subscriptions toMsg { isVisible } =
+    Sub.batch
+        [ Browser.Events.onKeyDown <|
+            considerKeyboardEvent
+                (\{ ctrlKey, shiftKey, keyCode } ->
+                    case ( isVisible, keyCode ) of
+                        ( False, P ) ->
+                            Just ShowUp
+
+                        ( True, Escape ) ->
+                            Just Close
+
+                        _ ->
+                            Nothing
+                )
+        ]
+        |> Sub.map toMsg
 
 
 init : List ( String, msg ) -> Model msg
