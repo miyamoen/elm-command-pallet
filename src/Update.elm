@@ -2,6 +2,7 @@ module Update exposing (init, subscriptions, update)
 
 import Browser.Dom as Dom
 import Browser.Events
+import Command
 import Keyboard.Event exposing (considerKeyboardEvent)
 import Keyboard.Key exposing (Key(..))
 import SelectList exposing (Direction(..))
@@ -11,9 +12,13 @@ import Types exposing (..)
 
 init : (Msg -> msg) -> List ( String, msg ) -> Model msg
 init toMsg msgs =
+    let
+        commands =
+            List.map (\( label, msg ) -> Command.init label msg) msgs
+    in
     { filter = ""
-    , msgs = msgs
-    , filtered = SelectList.fromList msgs
+    , commands = commands
+    , filtered = SelectList.fromList commands
     , isVisible = False
     , toMsg = toMsg
     }
@@ -34,7 +39,7 @@ update msg model =
                 { model
                     | isVisible = False
                     , filter = ""
-                    , filtered = SelectList.fromList model.msgs
+                    , filtered = SelectList.fromList model.commands
                 }
                 Cmd.none
 
@@ -42,13 +47,7 @@ update msg model =
             Tuple.pair
                 { model
                     | filter = input
-                    , filtered =
-                        List.filter
-                            (\( label, _ ) ->
-                                String.contains (String.toLower input) label
-                            )
-                            model.msgs
-                            |> SelectList.fromList
+                    , filtered = Command.filter input model.commands
                 }
                 Cmd.none
 
@@ -77,7 +76,7 @@ update msg model =
                 { model
                     | isVisible = False
                     , filter = ""
-                    , filtered = SelectList.fromList model.msgs
+                    , filtered = SelectList.fromList model.commands
                 }
                 Cmd.none
 

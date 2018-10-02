@@ -1,15 +1,30 @@
-module Types exposing (Model, Msg(..), inputId, logMsg)
+module Types exposing (Command, Filtered, Fragment, Model, Msg(..), inputId, logMsg)
 
 import SelectList exposing (SelectList)
 
 
 type alias Model msg =
     { filter : String
-    , msgs : List ( String, msg )
-    , filtered : Maybe (SelectList ( String, msg ))
+    , commands : List (Command msg)
+    , filtered : Filtered msg
     , isVisible : Bool
     , toMsg : Msg -> msg
     }
+
+
+type alias Filtered msg =
+    Maybe (SelectList (Command msg))
+
+
+type alias Command msg =
+    { label : String
+    , msg : msg
+    , fragments : List Fragment
+    }
+
+
+type alias Fragment =
+    { text : String, matched : Bool }
 
 
 type Msg
