@@ -1,4 +1,4 @@
-module Organism.Input exposing (book, view)
+module Atom.Input exposing (book, view)
 
 import Bibliopola exposing (..)
 import Bibliopola.Story as Story
