@@ -1,4 +1,4 @@
-module Command exposing (divide, filter, init, match)
+module Command exposing (divide, dummy, filter, init, match)
 
 import SelectList exposing (SelectList)
 import Types exposing (..)
@@ -36,3 +36,11 @@ init label msg =
     , msg = msg
     , fragments = [ { text = label, matched = False } ]
     }
+
+
+dummy : SelectList (Command Int)
+dummy =
+    SelectList.fromLists
+        [ init "one" 1, init "two" 2 ]
+        (init "three" 3)
+        [ init "four" 4, init "five" 5, init "six" 6 ]
