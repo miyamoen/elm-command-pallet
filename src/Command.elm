@@ -1,6 +1,6 @@
-module Command exposing (divide, dummy, filter, init, match)
+module Command exposing (divide, downCursor, dummy, filter, init, match, upCursor)
 
-import SelectList exposing (SelectList)
+import SelectList exposing (Direction(..), SelectList)
 import Types exposing (..)
 
 
@@ -36,6 +36,18 @@ init label msg =
     , msg = msg
     , fragments = [ { text = label, matched = False } ]
     }
+
+
+upCursor : SelectList (Command msg) -> SelectList (Command msg)
+upCursor commands =
+    SelectList.changePosition Before 1 commands
+        |> Maybe.withDefault (SelectList.changePositionToEnd After commands)
+
+
+downCursor : SelectList (Command msg) -> SelectList (Command msg)
+downCursor commands =
+    SelectList.changePosition After 1 commands
+        |> Maybe.withDefault (SelectList.changePositionToEnd Before commands)
 
 
 dummy : SelectList (Command Int)

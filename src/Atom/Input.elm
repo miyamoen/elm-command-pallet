@@ -39,6 +39,12 @@ onKeyDown =
                         Escape ->
                             Just <| message Close
 
+                        Up ->
+                            Just <| message UpCursor
+
+                        Down ->
+                            Just <| message DownCursor
+
                         _ ->
                             Nothing
                 )

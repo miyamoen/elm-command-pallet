@@ -62,22 +62,12 @@ update msg model =
 
         UpCursor ->
             Tuple.pair
-                { model
-                    | filtered =
-                        Maybe.map
-                            (SelectList.attempt (SelectList.changePosition Before 1))
-                            model.filtered
-                }
+                { model | filtered = Maybe.map Command.upCursor model.filtered }
                 Cmd.none
 
         DownCursor ->
             Tuple.pair
-                { model
-                    | filtered =
-                        Maybe.map
-                            (SelectList.attempt (SelectList.changePosition After 1))
-                            model.filtered
-                }
+                { model | filtered = Maybe.map Command.downCursor model.filtered }
                 Cmd.none
 
         Confirm ->
