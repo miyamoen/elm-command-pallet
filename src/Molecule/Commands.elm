@@ -7,25 +7,25 @@ import Element exposing (..)
 import Element.Events exposing (onClick)
 import Element.Font as Font exposing (..)
 import Molecule.Command as Command
-import SelectList exposing (Position(..), SelectList)
-import Types exposing (Command, logMsg)
+import SelectList exposing (SelectList)
+import Types exposing (..)
 
 
-view : Maybe (SelectList (Command msg)) -> Element msg
-view commands =
-    Maybe.map whenJust commands
+view : (Msg -> msg) -> Maybe (SelectList (Command msg)) -> Element msg
+view toMsg commands =
+    Maybe.map (whenJust toMsg) commands
         |> Maybe.withDefault (el [ width fill ] <| text "no matches found")
 
 
-whenJust : SelectList (Command msg) -> Element msg
-whenJust commands =
-    column [ spacing 4, width fill ] <|
+whenJust : (Msg -> msg) -> SelectList (Command msg) -> Element msg
+whenJust toMsg commands =
+    column [ spacing 4, width fill, onClick <| toMsg Close ] <|
         SelectList.mapBy Command.view commands
 
 
 book : Book
 book =
-    intoBook "Commands" String.fromInt view
+    intoBook "Commands" String.fromInt (view (always 999))
         |> addStory commandsStory
         |> buildBook
 

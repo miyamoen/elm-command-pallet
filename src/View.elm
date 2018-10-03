@@ -15,7 +15,7 @@ view { isVisible, filtered, filter, toMsg } =
     if isVisible then
         Frame.view toMsg
             [ Input.view filter |> Element.map toMsg
-            , Commands.view filtered
+            , Commands.view toMsg filtered
             ]
 
     else
