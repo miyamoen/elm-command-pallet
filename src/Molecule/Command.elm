@@ -22,7 +22,7 @@ view pos command =
     el
         [ onClick msg
         , if pos == Selected then
-            Background.color <| rgb255 155 160 180
+            Background.color <| rgb255 137 139 161
 
           else
             regular

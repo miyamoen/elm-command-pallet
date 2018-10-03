@@ -6,6 +6,7 @@ import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Events exposing (onClick)
+import Element.Font as Font
 import Html.Events exposing (stopPropagationOn)
 import Json.Decode as Decode
 import Types exposing (..)
@@ -18,6 +19,7 @@ view toMsg children =
         , height <| fill
         , paddingXY 24 40
         , Background.color <| rgba255 110 115 135 0.5
+        , Font.color <| rgb255 211 219 233
         , onClick <| toMsg Close
         ]
     <|
