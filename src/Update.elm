@@ -3,6 +3,7 @@ module Update exposing (init, subscriptions, update)
 import Browser.Dom as Dom
 import Browser.Events
 import Command
+import Json.Decode exposing (Decoder)
 import Keyboard.Event exposing (considerKeyboardEvent)
 import Keyboard.Key exposing (Key(..))
 import SelectList exposing (Direction(..))
@@ -24,6 +25,15 @@ init toMsg msgs =
     }
 
 
+reset : Model msg -> Model msg
+reset model =
+    { model
+        | isVisible = False
+        , filter = ""
+        , filtered = SelectList.fromList model.commands
+    }
+
+
 update : Msg -> Model msg -> ( Model msg, Cmd msg )
 update msg model =
     case msg of
@@ -35,13 +45,7 @@ update msg model =
                 Task.attempt (\_ -> model.toMsg NoOp) (Dom.focus inputId)
 
         Close ->
-            Tuple.pair
-                { model
-                    | isVisible = False
-                    , filter = ""
-                    , filtered = SelectList.fromList model.commands
-                }
-                Cmd.none
+            Tuple.pair (reset model) Cmd.none
 
         Input input ->
             Tuple.pair
@@ -77,30 +81,30 @@ update msg model =
                 Cmd.none
 
         Confirm ->
-            Tuple.pair
-                { model
-                    | isVisible = False
-                    , filter = ""
-                    , filtered = SelectList.fromList model.commands
-                }
-                Cmd.none
+            case model.filtered of
+                Just command ->
+                    Tuple.pair (reset model) <|
+                        Task.perform identity
+                            (Task.succeed <| .msg <| SelectList.selected command)
+
+                Nothing ->
+                    Tuple.pair model Cmd.none
 
 
 subscriptions : Model msg -> Sub msg
 subscriptions { isVisible, toMsg } =
-    Sub.batch
-        [ Browser.Events.onKeyDown <|
-            considerKeyboardEvent
-                (\{ ctrlKey, shiftKey, keyCode } ->
-                    case ( isVisible, keyCode ) of
-                        ( False, P ) ->
-                            Just ShowUp
-
-                        ( True, Escape ) ->
-                            Just Close
-
-                        _ ->
-                            Nothing
-                )
-        ]
+    Browser.Events.onKeyDown (showUpDecoder isVisible)
         |> Sub.map toMsg
+
+
+showUpDecoder : Bool -> Decoder Msg
+showUpDecoder isVisible =
+    considerKeyboardEvent
+        (\{ ctrlKey, shiftKey, keyCode } ->
+            case ( isVisible, keyCode ) of
+                ( False, P ) ->
+                    Just ShowUp
+
+                _ ->
+                    Nothing
+        )
