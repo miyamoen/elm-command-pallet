@@ -15,7 +15,9 @@ init : (Msg -> msg) -> List ( String, msg ) -> Model msg
 init toMsg msgs =
     let
         commands =
-            List.map (\( label, msg ) -> Command.init label msg) msgs
+            List.indexedMap
+                (\index ( label, msg ) -> Command.init index label msg)
+                msgs
     in
     { filter = ""
     , commands = commands

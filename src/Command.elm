@@ -14,9 +14,9 @@ filter query commands =
 
         fuzzyMatched =
             fuzzyFilter query
-                (Set.fromList .label commands
+                (Set.fromList .index commands
                     |> (\original ->
-                            Set.diff original <| Set.fromList .label partialMatched
+                            Set.diff original <| Set.fromList .index partialMatched
                        )
                     |> Set.toList
                 )
@@ -55,11 +55,12 @@ divide start last label =
     ]
 
 
-init : String -> msg -> Command msg
-init label msg =
+init : Int -> String -> msg -> Command msg
+init index label msg =
     { label = label
     , msg = msg
     , fragments = [ { text = label, matched = False } ]
+    , index = index
     }
 
 
@@ -78,6 +79,6 @@ downCursor commands =
 dummy : SelectList (Command Int)
 dummy =
     SelectList.fromLists
-        [ init "one" 1, init "two" 2 ]
-        (init "three" 3)
-        [ init "four" 4, init "five" 5, init "six" 6 ]
+        [ init 0 "one" 1, init 1 "two" 2 ]
+        (init 2 "three" 3)
+        [ init 3 "four" 4, init 4 "five" 5, init 5 "six" 6 ]

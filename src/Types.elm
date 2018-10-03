@@ -20,6 +20,7 @@ type alias Command msg =
     { label : String
     , msg : msg
     , fragments : List Fragment
+    , index : Int
     }
 
 
