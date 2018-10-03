@@ -1,4 +1,12 @@
-module CommandPallet exposing (Model(..), Msg, init, subscriptions, update, view)
+module CommandPallet exposing
+    ( Model(..)
+    , Msg
+    , init
+    , showUpMsg
+    , subscriptions
+    , update
+    , view
+    )
 
 import Element exposing (Element)
 import Types
@@ -34,3 +42,8 @@ view (CommandPallet model) =
 subscriptions : Model msg -> Sub msg
 subscriptions (CommandPallet model) =
     Update.subscriptions model
+
+
+showUpMsg : Msg
+showUpMsg =
+    Types.ShowUp

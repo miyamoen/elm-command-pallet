@@ -30,6 +30,9 @@ init =
             CP.init CommandPalletMsg
                 [ Tuple.pair "Increment" Increment
                 , Tuple.pair "Decrement" Decrement
+                , Tuple.pair "1" <| Set 1
+                , Tuple.pair "100" <| Set 100
+                , Tuple.pair "900" <| Set 900
                 ]
       }
     , Cmd.none
@@ -40,6 +43,7 @@ type Msg
     = NoOp
     | Increment
     | Decrement
+    | Set Int
     | CommandPalletMsg CP.Msg
 
 
@@ -54,6 +58,9 @@ update msg model =
 
         Decrement ->
             Tuple.pair { model | num = model.num - 1 } Cmd.none
+
+        Set num ->
+            Tuple.pair { model | num = num } Cmd.none
 
         CommandPalletMsg subMsg ->
             let
