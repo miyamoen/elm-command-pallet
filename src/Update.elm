@@ -47,7 +47,12 @@ update msg model =
             Tuple.pair
                 { model
                     | filter = input
-                    , filtered = Command.filter input model.commands
+                    , filtered =
+                        if String.isEmpty input then
+                            SelectList.fromList model.commands
+
+                        else
+                            Command.filter input model.commands
                 }
                 Cmd.none
 
