@@ -1,13 +1,38 @@
 module Command exposing (divide, downCursor, dummy, filter, init, match, upCursor)
 
 import SelectList exposing (Direction(..), SelectList)
+import Set.Any as Set
+import Simple.Fuzzy as Fuzzy
 import Types exposing (..)
 
 
 filter : String -> List (Command msg) -> Filtered msg
 filter query commands =
+    let
+        partialMatched =
+            partialFilter query commands
+
+        fuzzyMatched =
+            fuzzyFilter query
+                (Set.fromList .label commands
+                    |> (\original ->
+                            Set.diff original <| Set.fromList .label partialMatched
+                       )
+                    |> Set.toList
+                )
+    in
+    SelectList.fromList
+        (partialMatched ++ fuzzyMatched)
+
+
+partialFilter : String -> List (Command msg) -> List (Command msg)
+partialFilter query commands =
     List.filterMap (match query) commands
-        |> SelectList.fromList
+
+
+fuzzyFilter : String -> List (Command msg) -> List (Command msg)
+fuzzyFilter query commands =
+    Fuzzy.filter .label query commands
 
 
 match : String -> Command msg -> Maybe (Command msg)
