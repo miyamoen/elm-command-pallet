@@ -26,8 +26,10 @@ view pos command =
 
           else
             regular
-        , padding 8
+        , mouseOver [ Background.color <| rgb255 137 139 161 ]
         , Border.rounded 3
+        , pointer
+        , padding 8
         , width fill
         ]
     <|

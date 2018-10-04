@@ -19,7 +19,7 @@ view toMsg commands =
 
 whenJust : (Msg -> msg) -> SelectList (Command msg) -> Element msg
 whenJust toMsg commands =
-    column [ spacing 4, width fill, onClick <| toMsg Close ] <|
+    column [ width fill, onClick <| toMsg Close ] <|
         SelectList.mapBy Command.view commands
 
 
