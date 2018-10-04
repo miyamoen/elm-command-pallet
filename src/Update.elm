@@ -1,4 +1,4 @@
-module Update exposing (init, subscriptions, update)
+module Update exposing (init, subscriptions, subscriptionsWithKey, update)
 
 import Browser.Dom as Dom
 import Browser.Events
@@ -83,18 +83,23 @@ update msg model =
                     Tuple.pair model Cmd.none
 
 
-subscriptions : Model msg -> Sub msg
-subscriptions { isVisible, toMsg } =
-    Browser.Events.onKeyDown (showUpDecoder isVisible)
+subscriptionsWithKey : Key -> Model msg -> Sub msg
+subscriptionsWithKey key { isVisible, toMsg } =
+    Browser.Events.onKeyDown (showUpDecoder key isVisible)
         |> Sub.map toMsg
 
 
-showUpDecoder : Bool -> Decoder Msg
-showUpDecoder isVisible =
+subscriptions : Model msg -> Sub msg
+subscriptions model =
+    subscriptionsWithKey P model
+
+
+showUpDecoder : Key -> Bool -> Decoder Msg
+showUpDecoder key isVisible =
     considerKeyboardEvent
         (\{ ctrlKey, shiftKey, keyCode } ->
-            case ( isVisible, keyCode ) of
-                ( False, P ) ->
+            case ( isVisible, keyCode == key ) of
+                ( False, True ) ->
                     Just ShowUp
 
                 _ ->

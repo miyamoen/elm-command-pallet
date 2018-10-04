@@ -4,11 +4,13 @@ module CommandPallet exposing
     , init
     , showUpMsg
     , subscriptions
+    , subscriptionsWithKey
     , update
     , view
     )
 
 import Element exposing (Element)
+import Keyboard.Key exposing (Key(..))
 import Types
 import Update
 import View
@@ -42,6 +44,11 @@ view (CommandPallet model) =
 subscriptions : Model msg -> Sub msg
 subscriptions (CommandPallet model) =
     Update.subscriptions model
+
+
+subscriptionsWithKey : Key -> Model msg -> Sub msg
+subscriptionsWithKey key (CommandPallet model) =
+    Update.subscriptionsWithKey key model
 
 
 showUpMsg : Msg

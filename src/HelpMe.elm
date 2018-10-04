@@ -31,7 +31,11 @@ init =
                 [ Tuple.pair "Increment" Increment
                 , Tuple.pair "Decrement" Decrement
                 , Tuple.pair "1" <| Set 1
+                , Tuple.pair "11" <| Set 11
+                , Tuple.pair "123" <| Set 123
+                , Tuple.pair "151" <| Set 151
                 , Tuple.pair "100" <| Set 100
+                , Tuple.pair "101" <| Set 101
                 , Tuple.pair "900" <| Set 900
                 ]
       }
@@ -80,12 +84,14 @@ subscriptions { commandPallet } =
 view : Model -> Html Msg
 view { num, commandPallet } =
     layout [ inFront <| CP.view commandPallet ] <|
-        column [ width fill ]
-            [ row [ width fill, spacing 5 ]
+        column [ width fill, height fill, explain Debug.todo ]
+            [ row [ width fill, height fill, spacing 5 ]
                 [ button [ centerX ]
                     { onPress = Just Decrement, label = el [] <| text "<" }
                 , el [ centerX ] <| text <| String.fromInt num
                 , button [ centerX ]
                     { onPress = Just Increment, label = el [] <| text ">" }
                 ]
+            , row [ width fill, height fill ]
+                [ el [ centerX ] <| text "hi" ]
             ]
