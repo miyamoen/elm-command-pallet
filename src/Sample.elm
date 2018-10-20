@@ -1,4 +1,4 @@
-module HelpMe exposing (Model)
+module Sample exposing (Model, Msg(..), element, html, init, main, subscriptions, update)
 
 import Browser
 import CommandPallet as CP
@@ -11,7 +11,7 @@ main : Program () Model Msg
 main =
     Browser.element
         { init = always init
-        , view = view_
+        , view = element
         , update = update
         , subscriptions = subscriptions
         }
@@ -81,9 +81,9 @@ subscriptions { commandPallet } =
     CP.subscriptions commandPallet
 
 
-view : Model -> Html Msg
-view { num, commandPallet } =
-    layout [ inFront <| CP.element commandPallet ] <|
+element : Model -> Html Msg
+element { num, commandPallet } =
+    layout [ CP.inFront commandPallet ] <|
         row [ width fill, height fill, spacing 5 ]
             [ button [ centerX ]
                 { onPress = Just Decrement, label = el [] <| text "<" }
@@ -93,8 +93,8 @@ view { num, commandPallet } =
             ]
 
 
-view_ : Model -> Html Msg
-view_ { num, commandPallet } =
+html : Model -> Html Msg
+html { num, commandPallet } =
     Html.div []
         [ CP.html commandPallet
         , p []
