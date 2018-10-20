@@ -1,6 +1,6 @@
 module Command exposing (divide, downCursor, dummy, filter, init, match, upCursor)
 
-import SelectList exposing (Direction(..), SelectList)
+import SelectList exposing (SelectList)
 import Set.Any as Set
 import Simple.Fuzzy as Fuzzy
 import Types exposing (..)
@@ -66,14 +66,12 @@ init index label msg =
 
 upCursor : SelectList (Command msg) -> SelectList (Command msg)
 upCursor commands =
-    SelectList.changePosition Before 1 commands
-        |> Maybe.withDefault (SelectList.changePositionToEnd After commands)
+    SelectList.selectWhileLoopBy -1 commands
 
 
 downCursor : SelectList (Command msg) -> SelectList (Command msg)
 downCursor commands =
-    SelectList.changePosition After 1 commands
-        |> Maybe.withDefault (SelectList.changePositionToEnd Before commands)
+    SelectList.selectWhileLoopBy 1 commands
 
 
 dummy : SelectList (Command Int)

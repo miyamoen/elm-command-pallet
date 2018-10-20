@@ -6,7 +6,7 @@ import Command
 import Json.Decode exposing (Decoder)
 import Keyboard.Event exposing (considerKeyboardEvent)
 import Keyboard.Key exposing (Key(..))
-import SelectList exposing (Direction(..))
+import SelectList
 import Task
 import Types exposing (..)
 
