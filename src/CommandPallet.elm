@@ -1,15 +1,17 @@
 module CommandPallet exposing
     ( Model(..)
     , Msg
+    , element
+    , html
     , init
     , showUpMsg
     , subscriptions
     , subscriptionsWithKey
     , update
-    , view
     )
 
-import Element exposing (Element)
+import Element exposing (Element, inFront, layout, none)
+import Html exposing (Html)
 import Keyboard.Key exposing (Key(..))
 import Types
 import Update
@@ -36,9 +38,14 @@ init toMsg msgs =
         |> CommandPallet
 
 
-view : Model msg -> Element msg
-view (CommandPallet model) =
+element : Model msg -> Element msg
+element (CommandPallet model) =
     View.view model
+
+
+html : Model msg -> Html msg
+html model =
+    layout [ inFront <| element model ] none
 
 
 subscriptions : Model msg -> Sub msg

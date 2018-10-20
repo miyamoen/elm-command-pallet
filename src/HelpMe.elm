@@ -4,14 +4,14 @@ import Browser
 import CommandPallet as CP
 import Element exposing (..)
 import Element.Input exposing (button)
-import Html exposing (Html)
+import Html exposing (Html, p)
 
 
 main : Program () Model Msg
 main =
     Browser.element
         { init = always init
-        , view = view
+        , view = view_
         , update = update
         , subscriptions = subscriptions
         }
@@ -83,15 +83,23 @@ subscriptions { commandPallet } =
 
 view : Model -> Html Msg
 view { num, commandPallet } =
-    layout [ inFront <| CP.view commandPallet ] <|
-        column [ width fill, height fill, explain Debug.todo ]
-            [ row [ width fill, height fill, spacing 5 ]
-                [ button [ centerX ]
-                    { onPress = Just Decrement, label = el [] <| text "<" }
-                , el [ centerX ] <| text <| String.fromInt num
-                , button [ centerX ]
-                    { onPress = Just Increment, label = el [] <| text ">" }
-                ]
-            , row [ width fill, height fill ]
-                [ el [ centerX ] <| text "hi" ]
+    layout [ inFront <| CP.element commandPallet ] <|
+        row [ width fill, height fill, spacing 5 ]
+            [ button [ centerX ]
+                { onPress = Just Decrement, label = el [] <| text "<" }
+            , el [ centerX ] <| text <| String.fromInt num
+            , button [ centerX ]
+                { onPress = Just Increment, label = el [] <| text ">" }
             ]
+
+
+view_ : Model -> Html Msg
+view_ { num, commandPallet } =
+    Html.div []
+        [ CP.html commandPallet
+        , p []
+            [ Html.button [] [ Html.text "<" ]
+            , Html.text <| String.fromInt num
+            , Html.button [] [ Html.text ">" ]
+            ]
+        ]
